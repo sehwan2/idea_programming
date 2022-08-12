@@ -1,0 +1,151 @@
+#include <stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#pragma warning(disable:4996)
+#define _CRT_SECUER_NO_WARNINGS
+//void error(char* message);
+//void init(LinkedQueueType* q);
+//int is_empty(LinkedQueueType* q);
+//int is_full(LinkedQueueType* q);
+//void enqueue(LinkedQueueType* q, element data);
+//element dequeue(LinkedQueueType* q);
+//void print_queue(LinkedQueueType* q);
+//void _register(LinkedQueueType* queue);
+//void _search();
+
+
+typedef struct {
+	char name[100];
+	char number[100];
+	char birth[100];
+}element;
+
+typedef struct {
+	element data;
+	struct QueueNode* link;
+} QueueNode;
+
+typedef struct {
+	QueueNode *front, *rear;
+} LinkedQueueType;
+void error(char* message)
+{
+	fprintf(stderr, "%s\n", message);
+	exit(1);
+}
+
+void init(LinkedQueueType* q)
+{
+	q->front = q->rear = 0;
+}
+int is_empty(LinkedQueueType* q)
+{
+	return (q->front == NULL);
+}
+int is_full(LinkedQueueType* q)
+{
+	return 0;
+}
+void enqueue(LinkedQueueType* q, element data)
+{
+	QueueNode* temp = (QueueNode*)malloc(sizeof(QueueNode));
+	temp->data = data;
+	temp->link = NULL;
+	if (is_empty(q)) {
+		q->front = temp;
+		q->rear = temp;
+	}
+	else {
+		q->rear->link = temp;
+		q->rear = temp;
+	}
+}
+element dequeue(LinkedQueueType* q)
+{
+	QueueNode* temp = q->front;
+	element data;
+	if (is_empty(q)) {
+		fprintf(stderr, "스택이 비어있음\n");
+		exit(1);
+	}
+	else {
+		data = temp->data;
+		q->front = q->front->link;
+		if (q->front == NULL)
+			q->rear = NULL;
+		free(temp);
+		return data;
+	}
+}
+void print_queue(LinkedQueueType* q)
+{
+	printf("\n\n\t예약자 확인 페이지입니다.\n\n");
+	QueueNode* p;
+	int cnt = 1;
+	for (p = q->front; p != NULL; p = p->link)
+	{
+		printf("\t%d.\n\t성함 : %s\n\t전화번호 : %s\n\t생년월일 : %s\n\n\n", cnt, p->data.name, p->data.number, p->data.birth);
+		cnt++;
+	}
+}
+
+void _search()
+{
+
+}
+// ListNode* name_search_list(ListNode* head, element x) // 탐색함수
+//{
+//	ListNode* p = head;
+//
+//	while (p != NULL) {
+//		if (strcmp(p->data.name, x.name) == 0) {
+//			return p;
+//		}
+//		p = p->link;
+//	}
+//	return NULL;
+//}
+
+
+int main(void)
+{
+	LinkedQueueType queue;
+	init(&queue);
+	int a;
+	element data;
+	char name[100];
+	char number[100];
+	char birth[100];
+
+	while (1)
+	{
+		printf("\t메인화면\n\n1.예약\n\n2.예약자확인\n\n3.종료\n\n");
+		scanf("%d", &a);
+
+		switch (a) {
+		case 1:
+			printf("예약화면입니다.\n");
+			
+			printf("이름을 입력하세요.(ex.홍길동)\n");
+			scanf("%s", &name);
+			printf("전화번호를 입력하세요 (ex.01011112222)\n");
+			scanf("%s", &number);
+			printf("생년월일을 입력하세요 (ex.980101)\n");
+			scanf("%s", &birth);
+
+			strcpy(data.name, name); strcpy(data.number, number); strcpy(data.birth, birth);
+			enqueue(&queue, data);
+			continue;
+		case 2:
+			print_queue(&queue);
+			continue;
+		case 3:
+			printf("프로그램을 종료합니다.\n");
+			return;
+		default:
+			printf("해당하지 않는 번호입니다.\n");
+			return;
+		}
+
+	}
+}
